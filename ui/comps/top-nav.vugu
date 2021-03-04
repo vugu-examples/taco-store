@@ -1,0 +1,11 @@
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="https://img.icons8.com/doodle/48/000000/taco.png"/>
+            Taco Store
+        </a>
+        <div class="d-flex">
+            <i class="fa fa-shopping-cart fa-3x"></i>
+        </div>
+    </div>
+</nav>
