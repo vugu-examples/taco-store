@@ -35,7 +35,7 @@ func (h *FrontendHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		cmd.Env = append(os.Environ(), "GO111MODULE=auto")
 
-		cmd.Dir = h.BaseDir
+		cmd.Dir = filepath.Join(h.BaseDir, "cmd", "taco-store")
 		b, err := cmd.CombinedOutput()
 		log.Printf("go run build-frontend.go - err: %v\n%s", err, b)
 		if err != nil {
