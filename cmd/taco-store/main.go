@@ -15,7 +15,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	hl := handlers.NewFrontendHandler(fullBaseDir)
-	log.Println(hl)
 	mem := memstore.NewTacoStore()
 
 	hl2 := handlers.NewTacoStoreAPIHandler(mem)
@@ -23,7 +22,7 @@ func main() {
 	mux.Handle("/api/taco-list", hl2)
 
 	l := "127.0.0.1:8844"
-	//log.Printf("Starting HTTP Server at %q", l)
+	log.Printf("Starting HTTP Server at %q", l)
 	log.Fatal(http.ListenAndServe(l, mux))
 	//	go func() {
 	//	log.Fatal(http.ListenAndServe(l, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
