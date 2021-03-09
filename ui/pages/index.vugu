@@ -1,3 +1,21 @@
 <div>
 index page
 </div>
+<script type="application/x-go">
+
+func (c *Index) Init(ctx vugu.InitCtx) {
+    go func() {
+    // :TODO move this call to state
+      resp, err := http.Get("/api/taco-list")
+      if err != nil {
+          log.Printf("Error fetching: %v", err)
+          return
+      }
+      log.Println(resp)
+      defer resp.Body.Close()
+      ctx.EventEnv().Lock()
+      ctx.EventEnv().UnlockRender()
+    }()
+}
+
+</script>

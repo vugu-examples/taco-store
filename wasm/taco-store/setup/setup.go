@@ -22,7 +22,10 @@ func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 	// CREATE THE ROOT COMPONENT
 	root := &pages.Root{}
 	buildEnv.WireComponent(root) // WIRE IT
-
+	router.MustAddRouteExact("/",
+		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
+			root.Body = &pages.Index{} // A PAGE FOR THE NOT-FOUND CASE
+		}))
 	router.SetNotFound(vgrouter.RouteHandlerFunc(
 		func(rm *vgrouter.RouteMatch) {
 			root.Body = &pages.PageNotFound{} // A PAGE FOR THE NOT-FOUND CASE
