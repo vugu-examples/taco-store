@@ -6,6 +6,33 @@
         </a>
         <div class="d-flex">
             <i class="fa fa-shopping-cart fa-3x"></i>
+            <span class="badge badge-warning" style='height: 20px'>
+                <span>(</span>
+                <span vg-content='len(c.Card)'></span>
+                <span>)</span>
+            </span>
         </div>
     </div>
 </nav>
+<script type="application/x-go">
+import (
+    "log"
+    "github.com/vugu-examples/taco-store/ui/state"
+)
+type TopNav struct {
+    state.CardAPIRef
+}
+func (c *TopNav) Init(ctx vugu.InitCtx) {
+    go func () {
+        _, updated, err := c.GetCard()
+            if err != nil {
+            log.Printf("error getting card: %v", err)
+            return
+        }
+
+        if updated{
+         ctx.EventEnv().Lock(); ctx.EventEnv().UnlockRender()
+        }
+    }()
+}
+</script>
