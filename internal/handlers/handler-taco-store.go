@@ -8,11 +8,11 @@ import (
 )
 
 type TacoStoreAPIHandler struct {
-	Store *memstore.TacoStore
+	Store *memstore.MemStore
 	*httprouter.Router
 }
 
-func NewTacoStoreAPIHandler(mem *memstore.TacoStore) *TacoStoreAPIHandler {
+func NewTacoStoreAPIHandler(mem *memstore.MemStore) *TacoStoreAPIHandler {
 	h := &TacoStoreAPIHandler{
 		Store:  mem,
 		Router: httprouter.New(),
