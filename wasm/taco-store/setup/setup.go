@@ -2,6 +2,7 @@ package setup
 
 import (
 	"github.com/vugu-examples/taco-store/ui/pages"
+	"github.com/vugu-examples/taco-store/ui/state"
 	"github.com/vugu/vgrouter"
 	"github.com/vugu/vugu"
 )
@@ -9,6 +10,8 @@ import (
 // OVERALL APPLICATION WIRING IN vuguSetup
 func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 
+	tl := state.LoadTacoListAPI()
+	ca := state.LoadCardAPI()
 	// CREATE A NEW ROUTER INSTANCE
 	router := vgrouter.New(eventEnv)
 
@@ -16,6 +19,12 @@ func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 	buildEnv.SetWireFunc(func(b vugu.Builder) {
 		if c, ok := b.(vgrouter.NavigatorSetter); ok {
 			c.NavigatorSet(router)
+		}
+		if s, ok := b.(state.TacoListAPISetter); ok {
+			s.TacoListAPISet(tl)
+		}
+		if s, ok := b.(state.CardAPISetter); ok {
+			s.CardAPISet(ca)
 		}
 	})
 
