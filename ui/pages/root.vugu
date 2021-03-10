@@ -6,8 +6,6 @@
 </div>
 
 <script type="application/x-go">
-import "log"
-import "net/http"
 import "github.com/vugu-examples/taco-store/ui/comps"
 
 
