@@ -33,7 +33,11 @@ func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 	buildEnv.WireComponent(root) // WIRE IT
 	router.MustAddRouteExact("/",
 		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
-			root.Body = &pages.Index{} // A PAGE FOR THE NOT-FOUND CASE
+			root.Body = &pages.Index{}
+		}))
+	router.MustAddRouteExact("/card",
+		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
+			root.Body = &pages.Card{}
 		}))
 	router.SetNotFound(vgrouter.RouteHandlerFunc(
 		func(rm *vgrouter.RouteMatch) {
