@@ -68,14 +68,6 @@ func NewMemStore() *MemStore {
 		}}
 }
 
-type Taco struct {
-	ID          int     `json:"id"`
-	Title       string  `json:"title"`
-	Description string  `json:"description"`
-	ImageUrl    string  `json:"image_url"`
-	Price       float32 `json:"price"`
-}
-
 func (t *MemStore) SelectTacoList() []Taco {
 	return t.TacoList
 }
