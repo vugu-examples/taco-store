@@ -3,11 +3,10 @@
         <div class="card h-100 ">
             <img :src="item.ImageUrl" class="card-img-top" alt="...">
             <div class="card-body d-flex flex-column">
-                <h5 vg-content='item.Title' class="card-title">Card title</h5>
-                <p vg-content='item.Description' class="card-text">Some quick example text to build on the card title
-                    and make up the bulk of the card's content.</p>
+                <h5 vg-content='item.Title' class="card-title"></h5>
+                <p vg-content='item.Description' class="card-text"></p>
                 <div class='taco-footer mt-auto'>
-                    <p class='float-left'>$13.99</p>
+                    <p class='float-left' vg-content='format.Currency(item.Price)'></p>
                     <div class='float-right'>
                         <button class="btn btn-warning" @click='c.AddItemToCard(event,index)'>Add to Card</button>
                     </div>
@@ -17,23 +16,6 @@
     </div>
 </div>
 <style>
-    .listing {
-        display: block;
-        margin: auto;
-    }
-
-    .taco {
-        margin: 20px;
-        width: 250px;
-        margin-bottom: 1em;
-        clear: both;
-        background: #fff;
-        box-shadow: 0px 2px 9px rgb(0 0 0 / 20%);
-        transition: all 0.5s;
-        border-radius: 6px;
-        display: inline-block;
-    }
-
     .card-img-top {
         height: 280px;
         width: 100%;
