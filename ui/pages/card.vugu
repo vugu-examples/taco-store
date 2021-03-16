@@ -6,12 +6,11 @@
         </h3>
         <div vg-for='index, item := range c.Card' class='row border mt-2 mb-3'>
             <div class='col-3 p-4'>
-                <img :src="item.ImageUrl" class="img-fluid w-100" alt="...">
+                <img :src="item.ImageUrl" class="img-fluid rounded" :alt="item.ImageUrl">
             </div>
             <div class='col-9 d-flex justify-content-between align-items-center '>
                 <div class='col text-left  '>
                     <h5 vg-content='item.Title'></h5>
-
                 </div>
                 <div class='col d-flex justify-content-between align-items-center'>
                     <span vg-content='format.Currency(item.Price) '></span>
@@ -22,7 +21,6 @@
 
             </div>
         </div>
-
     </div>
     <div class='col-4 mt-3'>
         <div class="mt-3 ml-2">
@@ -43,7 +41,6 @@
                         <span><strong vg-content='c.CalcTotal()'></strong></span>
                     </li>
                 </ul>
-
                 <button class="btn btn-warning" @click='c.Navigate("/checkout", nil)'><strong>Proceed to
                         checkout</strong></button>
             </div>
