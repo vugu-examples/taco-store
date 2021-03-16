@@ -1,10 +1,10 @@
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand btn" @click='c.Navigate("/", nil)'>
             <img src="https://img.icons8.com/doodle/48/000000/taco.png"/>
             Taco Store
         </a>
-        <div class="d-flex">
+        <div class="d-flex btn" @click='c.Navigate("/card", nil)'>
             <i class="fa fa-shopping-cart fa-3x"></i>
             <span class="badge badge-warning" style='height: 20px'>
                 <span>(</span>
@@ -18,8 +18,10 @@
 import (
     "log"
     "github.com/vugu-examples/taco-store/ui/state"
+    "github.com/vugu/vgrouter"
 )
 type TopNav struct {
+    vgrouter.NavigatorRef
     state.CardAPIRef
 }
 func (c *TopNav) Init(ctx vugu.InitCtx) {
