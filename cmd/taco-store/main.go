@@ -18,10 +18,10 @@ func main() {
 	mem := memstore.NewMemStore()
 
 	tchl := handlers.NewTacoStoreAPIHandler(mem)
-	cahl := handlers.NewCardAPIHandler(mem)
+	cahl := handlers.NewCartAPIHandler(mem)
 	mux.Handle("/", frhl)
 	mux.Handle("/api/taco-list", tchl)
-	mux.Handle("/api/card", cahl)
+	mux.Handle("/api/cart", cahl)
 
 	l := "127.0.0.1:8844"
 	log.Printf("Starting HTTP Server at %q", l)

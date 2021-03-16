@@ -1,5 +1,5 @@
 <div>
-    <main role="main" class="container text-center">
+    <main role="main" class="container">
         <comps:TopNav></comps:TopNav>
         <vg-comp expr="c.Body"/>
     </main>

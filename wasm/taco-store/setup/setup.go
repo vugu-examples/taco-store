@@ -39,9 +39,9 @@ func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
 			root.Body = &pages.Cart{}
 		}))
-	router.MustAddRouteExact("/card",
+	router.MustAddRouteExact("/checkout",
 		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
-			root.Body = &pages.Card{}
+			root.Body = &pages.Checkout{}
 		}))
 	router.SetNotFound(vgrouter.RouteHandlerFunc(
 		func(rm *vgrouter.RouteMatch) {
