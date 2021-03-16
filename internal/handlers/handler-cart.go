@@ -7,30 +7,30 @@ import (
 	"net/http"
 )
 
-type CardAPIHandler struct {
+type CartAPIHandler struct {
 	Store *memstore.MemStore
 	*httprouter.Router
 }
 
-func NewCardAPIHandler(mem *memstore.MemStore) *CardAPIHandler {
-	h := &CardAPIHandler{
+func NewCartAPIHandler(mem *memstore.MemStore) *CartAPIHandler {
+	h := &CartAPIHandler{
 		Store:  mem,
 		Router: httprouter.New(),
 	}
 	h.Router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
-	h.Router.GET("/api/card", h.GetCard)
-	h.Router.POST("/api/card", h.PostCard)
+	h.Router.GET("/api/cart", h.GetCart)
+	h.Router.POST("/api/cart", h.PostCart)
 
 	return h
 }
 
-func (h *CardAPIHandler) PostCard(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (h *CartAPIHandler) PostCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	var q memstore.Taco
 	json.NewDecoder(r.Body).Decode(&q)
-	h.Store.PostCard(q)
+	h.Store.PostCart(q)
 }
-func (h *CardAPIHandler) GetCard(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	card := h.Store.SelectCard()
-	json.NewEncoder(w).Encode(card)
+func (h *CartAPIHandler) GetCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	Cart := h.Store.SelectCart()
+	json.NewEncoder(w).Encode(Cart)
 }

@@ -8,7 +8,7 @@
                 <div class='taco-footer mt-auto'>
                     <p class='float-left' vg-content='format.Currency(item.Price)'></p>
                     <div class='float-right'>
-                        <button class="btn btn-warning" @click='c.AddItemToCard(event,index)'>Add to Card</button>
+                        <button class="btn btn-warning" @click='c.AddItemToCart(event,index)'>Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@ import (
 )
 type Index struct {
     state.TacoListAPIRef
-    state.CardAPIRef
+    state.CartAPIRef
 }
 func (c *Index) Init(ctx vugu.InitCtx) {
     go func () {
@@ -44,10 +44,10 @@ func (c *Index) Init(ctx vugu.InitCtx) {
     }()
 }
 
-func (c *Index) AddItemToCard (event vugu.DOMEvent, index int) {
+func (c *Index) AddItemToCart (event vugu.DOMEvent, index int) {
 	ee := event.EventEnv()
 	go func() {
-		err := c.PostCard(c.TacoList[index])
+		err := c.PostCart(c.TacoList[index])
 		if err != nil {
 			ee.Lock()
 			log.Printf("error completing atm state change approvals: %v", err)
@@ -56,7 +56,7 @@ func (c *Index) AddItemToCard (event vugu.DOMEvent, index int) {
 			return
 		}
 		ee.Lock()
-        c.Card = append(c.Card,c.TacoList[index])
+        c.Cart = append(c.Cart,c.TacoList[index])
 		//c.SuccessSubmit = true
 		ee.UnlockRender()
 	}()

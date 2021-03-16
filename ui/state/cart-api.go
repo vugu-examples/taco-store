@@ -9,43 +9,40 @@ import (
 	"net/http"
 )
 
-// CardAPI holds sku status.
-type CardAPI struct {
-	Card []memstore.Taco
+type CartAPI struct {
+	Cart []memstore.Taco
 	g    singleflight.Group
 }
 
-// GetCard fetches one service agreement record
-func (c *CardAPI) GetCard() ([]memstore.Taco, bool, error) {
+func (c *CartAPI) GetCart() ([]memstore.Taco, bool, error) {
 	//use singleflight to deduplicate
-	updated, err, _ := c.g.Do("/api/card", func() (interface{}, error) {
+	updated, err, _ := c.g.Do("/api/Cart", func() (interface{}, error) {
 		// if we already have the data, don't pull again
-		if c.Card != nil {
+		if c.Cart != nil {
 			return false, nil
 		}
-		url := "/api/card"
+		url := "/api/cart"
 		res, err := Get(url)
 		if err != nil {
-			log.Printf("Error GetCard() %v", err)
+			log.Printf("Error GetCart() %v", err)
 			return false, err
 		}
 		if res.StatusCode != http.StatusOK {
 			err = errors.New(fmt.Sprintf("Get %s returned status code %v", url, res.StatusCode))
 			return false, err
 		}
-		err = Decoder(res, &c.Card)
+		err = Decoder(res, &c.Cart)
 		if err != nil {
 			return false, err
 		}
 		return true, nil
 	})
-	return c.Card, updated.(bool), err
+	return c.Cart, updated.(bool), err
 }
 
-// CompleteAtmStateChangeApproval send a post request to create a new queue record
-func (c *CardAPI) PostCard(payload memstore.Taco) error {
+func (c *CartAPI) PostCart(payload memstore.Taco) error {
 
-	url := "/api/card"
+	url := "/api/cart"
 	res, err := Post(url, "application/json", payload)
 	if err != nil {
 		log.Printf("Error CompleteAtmStateChangeApproval: %v", err)
@@ -58,18 +55,18 @@ func (c *CardAPI) PostCard(payload memstore.Taco) error {
 	return nil
 }
 
-func LoadCardAPI() *CardAPI {
-	return &CardAPI{}
+func LoadCartAPI() *CartAPI {
+	return &CartAPI{}
 }
 
-type CardAPISetter interface {
-	CardAPISet(v *CardAPI)
+type CartAPISetter interface {
+	CartAPISet(v *CartAPI)
 }
 
-type CardAPIRef struct {
-	*CardAPI
+type CartAPIRef struct {
+	*CartAPI
 }
 
-func (r *CardAPIRef) CardAPISet(v *CardAPI) {
-	r.CardAPI = v
+func (r *CartAPIRef) CartAPISet(v *CartAPI) {
+	r.CartAPI = v
 }

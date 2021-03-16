@@ -11,7 +11,7 @@ import (
 func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 
 	tl := state.LoadTacoListAPI()
-	ca := state.LoadCardAPI()
+	ca := state.LoadCartAPI()
 	// CREATE A NEW ROUTER INSTANCE
 	router := vgrouter.New(eventEnv)
 
@@ -23,8 +23,8 @@ func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 		if s, ok := b.(state.TacoListAPISetter); ok {
 			s.TacoListAPISet(tl)
 		}
-		if s, ok := b.(state.CardAPISetter); ok {
-			s.CardAPISet(ca)
+		if s, ok := b.(state.CartAPISetter); ok {
+			s.CartAPISet(ca)
 		}
 	})
 
@@ -34,6 +34,10 @@ func VuguSetup(buildEnv *vugu.BuildEnv, eventEnv vugu.EventEnv) vugu.Builder {
 	router.MustAddRouteExact("/",
 		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
 			root.Body = &pages.Index{}
+		}))
+	router.MustAddRouteExact("/cart",
+		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {
+			root.Body = &pages.Cart{}
 		}))
 	router.MustAddRouteExact("/card",
 		vgrouter.RouteHandlerFunc(func(rm *vgrouter.RouteMatch) {

@@ -4,11 +4,11 @@
             <img src="https://img.icons8.com/doodle/48/000000/taco.png"/>
             Taco Store
         </a>
-        <div class="d-flex btn" @click='c.Navigate("/card", nil)'>
+        <div class="d-flex btn" @click='c.Navigate("/cart", nil)'>
             <i class="fa fa-shopping-cart fa-3x"></i>
             <span class="badge badge-warning" style='height: 20px'>
                 <span>(</span>
-                <span vg-content='len(c.Card)'></span>
+                <span vg-content='len(c.Cart)'></span>
                 <span>)</span>
             </span>
         </div>
@@ -22,11 +22,11 @@ import (
 )
 type TopNav struct {
     vgrouter.NavigatorRef
-    state.CardAPIRef
+    state.CartAPIRef
 }
 func (c *TopNav) Init(ctx vugu.InitCtx) {
     go func () {
-        _, updated, err := c.GetCard()
+        _, updated, err := c.GetCart()
             if err != nil {
             log.Printf("error getting card: %v", err)
             return

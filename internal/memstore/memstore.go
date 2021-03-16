@@ -2,7 +2,7 @@ package memstore
 
 type MemStore struct {
 	TacoList []Taco
-	Card     []Taco
+	Cart     []Taco
 }
 
 func NewMemStore() *MemStore {
@@ -57,7 +57,7 @@ func NewMemStore() *MemStore {
 			Price:       13.99,
 		},
 	},
-		Card: []Taco{
+		Cart: []Taco{
 			{
 				ID:          7,
 				Title:       "Carne Asada",
@@ -80,10 +80,10 @@ func (t *MemStore) SelectTacoList() []Taco {
 	return t.TacoList
 }
 
-func (t *MemStore) SelectCard() []Taco {
-	return t.Card
+func (t *MemStore) SelectCart() []Taco {
+	return t.Cart
 }
 
-func (t *MemStore) PostCard(taco Taco) {
-	t.Card = append(t.Card, taco)
+func (t *MemStore) PostCart(taco Taco) {
+	t.Cart = append(t.Cart, taco)
 }
