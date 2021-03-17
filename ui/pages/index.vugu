@@ -1,6 +1,6 @@
 <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
-    <div vg-for='index, item := range c.TacoList' class="col my-1">
-        <div class="card h-100 ">
+    <div vg-for='index, item := range c.TacoList' class="col my-3">
+        <div class="card h-100">
             <img :src="item.ImageUrl" class="card-img-top" alt="...">
             <div class="card-body d-flex flex-column">
                 <h5 vg-content='item.Title' class="card-title"></h5>
@@ -8,7 +8,7 @@
                 <div class='taco-footer mt-auto'>
                     <p class='float-left' vg-content='format.Currency(item.Price)'></p>
                     <div class='float-right'>
-                        <button class="btn btn-warning" @click='c.AddItemToCart(event,index)'>Add to Cart</button>
+                        <button class="btn btn-warning" @click='c.AddCartItem(event,index)'>Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
 </div>
 <style>
     .card-img-top {
-        height: 280px;
+        height: 200px;
         width: 100%;
     }
 </style>
@@ -44,20 +44,19 @@ func (c *Index) Init(ctx vugu.InitCtx) {
     }()
 }
 
-func (c *Index) AddItemToCart (event vugu.DOMEvent, index int) {
+func (c *Index) AddCartItem (event vugu.DOMEvent, index int) {
 	ee := event.EventEnv()
 	go func() {
 		err := c.PostCart(c.TacoList[index])
 		if err != nil {
 			ee.Lock()
-			log.Printf("error completing atm state change approvals: %v", err)
+			log.Printf("error adding cart item: %v", err)
 
 			ee.UnlockRender()
 			return
 		}
 		ee.Lock()
         c.Cart = append(c.Cart,c.TacoList[index])
-		//c.SuccessSubmit = true
 		ee.UnlockRender()
 	}()
 
