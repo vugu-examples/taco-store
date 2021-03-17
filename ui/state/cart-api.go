@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/vugu-examples/taco-store/internal/memstore"
+	"github.com/vugu-examples/taco-store/ui/format"
 	"golang.org/x/sync/singleflight"
 	"log"
 	"net/http"
@@ -71,6 +72,17 @@ func (c *CartAPI) PatchCart(payload []memstore.Taco) error {
 		return err
 	}
 	return nil
+}
+
+func (c *CartAPI) GetCartTotal() string {
+	if c.Cart == nil {
+		return ""
+	}
+	var sum float32
+	for _, item := range c.Cart {
+		sum += item.Price
+	}
+	return format.Currency(sum)
 }
 
 func LoadCartAPI() *CartAPI {

@@ -28,7 +28,7 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                         Subtotal
-                        <span vg-content='c.CalcTotal()'></span>
+                        <span vg-content='c.GetCartTotal()'></span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                         Shipping
@@ -38,7 +38,7 @@
                         <div>
                             <strong>Total</strong>
                         </div>
-                        <span><strong vg-content='c.CalcTotal()'></strong></span>
+                        <span><strong vg-content='c.GetCartTotal()'></strong></span>
                     </li>
                     <li class='list-group-item text-center'>
                             <button class="btn btn-warning " @click='c.Navigate("/checkout", nil)'><strong>Proceed to
@@ -92,13 +92,5 @@ func (c *Cart) DeleteCardItem (event vugu.DOMEvent, i int) {
         c.Cart = newList
 		ee.UnlockRender()
 	}()
-}
-
-func (c *Cart) CalcTotal() string {
-	var sum float32
-	for _, item := range c.Cart {
-		sum += item.Price
-	}
-	return format.Currency(sum)
 }
 </script>
