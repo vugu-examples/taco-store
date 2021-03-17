@@ -21,6 +21,7 @@ func NewCartAPIHandler(mem *memstore.MemStore) *CartAPIHandler {
 
 	h.Router.GET("/api/cart", h.GetCart)
 	h.Router.POST("/api/cart", h.PostCart)
+	h.Router.PATCH("/api/cart", h.PatchCart)
 
 	return h
 }
@@ -30,7 +31,14 @@ func (h *CartAPIHandler) PostCart(w http.ResponseWriter, r *http.Request, params
 	json.NewDecoder(r.Body).Decode(&q)
 	h.Store.PostCart(q)
 }
+
 func (h *CartAPIHandler) GetCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	Cart := h.Store.SelectCart()
 	json.NewEncoder(w).Encode(Cart)
+}
+
+func (h *CartAPIHandler) PatchCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	var q []memstore.Taco
+	json.NewDecoder(r.Body).Decode(&q)
+	h.Store.PatchCart(q)
 }

@@ -6,7 +6,7 @@
         </h3>
         <div vg-for='index, item := range c.Cart' class='row border mt-2 mb-3 ml-0'>
             <div class='col-3 p-4'>
-                <img :src="item.ImageUrl" class="img-fluid rounded" :alt="item.ImageUrl">
+                <img :src="item.ImageUrl" class="img-fluid rounded">
             </div>
             <div class='col-9 d-flex justify-content-between align-items-center '>
                 <div class='col text-left  '>
@@ -14,7 +14,7 @@
                 </div>
                 <div class='col d-flex justify-content-between align-items-center'>
                     <span vg-content='format.Currency(item.Price) '></span>
-                    <button class='btn'>
+                    <button class='btn' @click='c.DeleteCardItem(event,index)'>
                         <i class="fa fa-times "></i>
                     </button>
                 </div>
@@ -74,6 +74,23 @@ func (c *Cart) Init(ctx vugu.InitCtx) {
 			ctx.EventEnv().Lock()
 			ctx.EventEnv().UnlockRender()
 		}
+	}()
+}
+
+func (c *Cart) DeleteCardItem (event vugu.DOMEvent, i int) {
+    newList := append(c.Cart[:i], c.Cart[i+1:]...)
+	ee := event.EventEnv()
+	go func() {
+		err := c.PatchCart(newList)
+		if err != nil {
+			ee.Lock()
+			log.Printf("error deleting card item: %v", err)
+			ee.UnlockRender()
+			return
+		}
+		ee.Lock()
+        c.Cart = newList
+		ee.UnlockRender()
 	}()
 }
 

@@ -79,3 +79,7 @@ func (t *MemStore) SelectCart() []Taco {
 func (t *MemStore) PostCart(taco Taco) {
 	t.Cart = append(t.Cart, taco)
 }
+
+func (t *MemStore) PatchCart(newTacoList []Taco) {
+	t.Cart = newTacoList
+}

@@ -24,7 +24,7 @@ func (c *CartAPI) GetCart() ([]memstore.Taco, bool, error) {
 		url := "/api/cart"
 		res, err := Get(url)
 		if err != nil {
-			log.Printf("Error GetCart() %v", err)
+			err = errors.New(fmt.Sprintf("Error GetCart() %v", err))
 			return false, err
 		}
 		if res.StatusCode != http.StatusOK {
@@ -33,6 +33,7 @@ func (c *CartAPI) GetCart() ([]memstore.Taco, bool, error) {
 		}
 		err = Decoder(res, &c.Cart)
 		if err != nil {
+			err = errors.New(fmt.Sprintf("Error GetCart() Decoder  %v", err))
 			return false, err
 		}
 		return true, nil
@@ -45,11 +46,28 @@ func (c *CartAPI) PostCart(payload memstore.Taco) error {
 	url := "/api/cart"
 	res, err := Post(url, "application/json", payload)
 	if err != nil {
-		log.Printf("Error CompleteAtmStateChangeApproval: %v", err)
+		err = errors.New(fmt.Sprintf("Error PostCart() %v", err))
 		return err
 	}
 	if res.StatusCode != http.StatusOK {
-		err = errors.New(fmt.Sprintf("Post %s returned status code %v", url, res.StatusCode))
+		err = errors.New(fmt.Sprintf("PostCart %s returned status code %v", url, res.StatusCode))
+		return err
+	}
+	return nil
+}
+
+func (c *CartAPI) PatchCart(payload []memstore.Taco) error {
+
+	url := "/api/cart"
+	res, err := Patch(url, payload)
+	if err != nil {
+		err = errors.New(fmt.Sprintf("Error PatchCart() %v", err))
+		return err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		err = errors.New(fmt.Sprintf("PatchCart %s returned status code %v", url, res.StatusCode))
+		log.Printf("Error PatchCart: %v", err)
 		return err
 	}
 	return nil

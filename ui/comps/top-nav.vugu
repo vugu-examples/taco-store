@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class='col-2'>
-                                <button class='btn' @click='c.DeleteCartItem(index)'>
+                                <button class='btn' @click='c.DeleteCardItem(event,index)'>
                                     <i class="fa fa-times "></i>
                                 </button>
                             </div>
@@ -78,7 +78,7 @@
 import (
     "log"
     "github.com/vugu-examples/taco-store/ui/state"
-  "github.com/vugu-examples/taco-store/ui/format"
+    "github.com/vugu-examples/taco-store/ui/format"
     "github.com/vugu/vgrouter"
 )
 type TopNav struct {
@@ -104,5 +104,22 @@ func (c *TopNav) CalcTotal() string {
 		sum += item.Price
 	}
 	return format.Currency(sum)
+}
+
+func (c *TopNav) DeleteCardItem (event vugu.DOMEvent, i int) {
+    newList := append(c.Cart[:i], c.Cart[i+1:]...)
+	ee := event.EventEnv()
+	go func() {
+		err := c.PatchCart(newList)
+		if err != nil {
+			ee.Lock()
+			log.Printf("error deleting card item: %v", err)
+			ee.UnlockRender()
+			return
+		}
+		ee.Lock()
+        c.Cart = newList
+		ee.UnlockRender()
+	}()
 }
 </script>
