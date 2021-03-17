@@ -9,13 +9,13 @@ import (
 	"net/http"
 )
 
-// TacoListAPI holds sku status.
+// TacoListAPI holds API calls for Taco List
 type TacoListAPI struct {
 	TacoList []memstore.Taco
 	g        singleflight.Group
 }
 
-// GetTacoList fetches one service agreement record
+// GetTacoList fetches taco list
 func (c *TacoListAPI) GetTacoList() ([]memstore.Taco, bool, error) {
 	//use singleflight to deduplicate
 	updated, err, _ := c.g.Do("/api/taco-list", func() (interface{}, error) {
@@ -42,18 +42,22 @@ func (c *TacoListAPI) GetTacoList() ([]memstore.Taco, bool, error) {
 	return c.TacoList, updated.(bool), err
 }
 
+// LoadTacoListAPI returns a new instance of TacoListAPI
 func LoadTacoListAPI() *TacoListAPI {
 	return &TacoListAPI{}
 }
 
+// TacoListAPISetter interface for wiring
 type TacoListAPISetter interface {
 	TacoListAPISet(v *TacoListAPI)
 }
 
+// TacoListAPIRef ref for wiring
 type TacoListAPIRef struct {
 	*TacoListAPI
 }
 
+// TacoListAPISet setter for wiring
 func (r *TacoListAPIRef) TacoListAPISet(v *TacoListAPI) {
 	r.TacoListAPI = v
 }

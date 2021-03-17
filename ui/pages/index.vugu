@@ -47,7 +47,7 @@ func (c *Index) Init(ctx vugu.InitCtx) {
 func (c *Index) AddCartItem (event vugu.DOMEvent, index int) {
 	ee := event.EventEnv()
 	go func() {
-		err := c.PostCart(c.TacoList[index])
+		err := c.PostCartItem(c.TacoList[index])
 		if err != nil {
 			ee.Lock()
 			log.Printf("error adding cart item: %v", err)

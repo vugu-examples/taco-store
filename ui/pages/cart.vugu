@@ -81,7 +81,7 @@ func (c *Cart) DeleteCardItem (event vugu.DOMEvent, i int) {
     newList := append(c.Cart[:i], c.Cart[i+1:]...)
 	ee := event.EventEnv()
 	go func() {
-		err := c.PatchCart(newList)
+		err := c.DeleteCartItem(newList)
 		if err != nil {
 			ee.Lock()
 			log.Printf("error deleting card item: %v", err)

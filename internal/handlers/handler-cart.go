@@ -7,11 +7,13 @@ import (
 	"net/http"
 )
 
+// CartAPIHandler holds endpoints for cart items
 type CartAPIHandler struct {
 	Store *memstore.MemStore
 	*httprouter.Router
 }
 
+// NewCartAPIHandler returns a new instance of CartAPIHandler.
 func NewCartAPIHandler(mem *memstore.MemStore) *CartAPIHandler {
 	h := &CartAPIHandler{
 		Store:  mem,
@@ -20,25 +22,28 @@ func NewCartAPIHandler(mem *memstore.MemStore) *CartAPIHandler {
 	h.Router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {})
 
 	h.Router.GET("/api/cart", h.GetCart)
-	h.Router.POST("/api/cart", h.PostCart)
-	h.Router.PATCH("/api/cart", h.PatchCart)
+	h.Router.POST("/api/cart", h.PostCartItem)
+	h.Router.PATCH("/api/cart", h.DeleteCartItem)
 
 	return h
 }
 
-func (h *CartAPIHandler) PostCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+// PostCartItem creates a cart item
+func (h *CartAPIHandler) PostCartItem(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	var q memstore.Taco
 	json.NewDecoder(r.Body).Decode(&q)
-	h.Store.PostCart(q)
+	h.Store.PostCartItem(q)
 }
 
+// GetCart gets cart item list
 func (h *CartAPIHandler) GetCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	Cart := h.Store.SelectCart()
 	json.NewEncoder(w).Encode(Cart)
 }
 
-func (h *CartAPIHandler) PatchCart(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+// DeleteCartItem deletes cart item
+func (h *CartAPIHandler) DeleteCartItem(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	var q []memstore.Taco
 	json.NewDecoder(r.Body).Decode(&q)
-	h.Store.PatchCart(q)
+	h.Store.DeleteCartItem(q)
 }

@@ -76,10 +76,10 @@ func (t *MemStore) SelectCart() []Taco {
 	return t.Cart
 }
 
-func (t *MemStore) PostCart(taco Taco) {
+func (t *MemStore) PostCartItem(taco Taco) {
 	t.Cart = append(t.Cart, taco)
 }
 
-func (t *MemStore) PatchCart(newTacoList []Taco) {
+func (t *MemStore) DeleteCartItem(newTacoList []Taco) {
 	t.Cart = newTacoList
 }
