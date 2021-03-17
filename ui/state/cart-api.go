@@ -16,8 +16,8 @@ type CartAPI struct {
 	g    singleflight.Group
 }
 
-// GetCart fetches cart items. GetCart uses singleflight to avoid multiple requests
-// since top-nav.vugu and cart.vugu call GetCart and ask for the same data in their initialization.
+// GetCart fetches cart items and  uses singleflight to avoid multiple requests.
+// please check that top-nav.vugu and cart.vugu call GetCart and ask for the same data in their initialization.
 // see: https://pkg.go.dev/golang.org/x/sync/singleflight
 func (c *CartAPI) GetCart() ([]memstore.Taco, bool, error) {
 	//use singleflight to deduplicate

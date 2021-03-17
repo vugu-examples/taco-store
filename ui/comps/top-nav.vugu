@@ -85,22 +85,24 @@ type TopNav struct {
     vgrouter.NavigatorRef
     state.CartAPIRef
 }
-func (c *TopNav) Init(ctx vugu.InitCtx) {
-    go func () {
-        _, updated, err := c.GetCart()
-            if err != nil {
-            log.Printf("error getting card: %v", err)
-            return
-        }
 
-        if updated{
-         ctx.EventEnv().Lock(); ctx.EventEnv().UnlockRender()
-        }
-    }()
+func (c *TopNav) Init(ctx vugu.InitCtx) {
+	go func() {
+		_, updated, err := c.GetCart()
+		if err != nil {
+			log.Printf("error getting card: %v", err)
+			return
+		}
+
+		if updated {
+			ctx.EventEnv().Lock()
+			ctx.EventEnv().UnlockRender()
+		}
+	}()
 }
 
-func (c *TopNav) DeleteCardItem (event vugu.DOMEvent, i int) {
-    newList := append(c.Cart[:i], c.Cart[i+1:]...)
+func (c *TopNav) DeleteCardItem(event vugu.DOMEvent, i int) {
+	newList := append(c.Cart[:i], c.Cart[i+1:]...)
 	ee := event.EventEnv()
 	go func() {
 		err := c.DeleteCartItem(newList)
@@ -111,7 +113,7 @@ func (c *TopNav) DeleteCardItem (event vugu.DOMEvent, i int) {
 			return
 		}
 		ee.Lock()
-        c.Cart = newList
+		c.Cart = newList
 		ee.UnlockRender()
 	}()
 }

@@ -27,24 +27,26 @@ import (
     "github.com/vugu-examples/taco-store/ui/state"
 )
 type Index struct {
-    state.TacoListAPIRef
-    state.CartAPIRef
+	state.TacoListAPIRef
+	state.CartAPIRef
 }
+
 func (c *Index) Init(ctx vugu.InitCtx) {
-    go func () {
-        _, updated, err := c.GetTacoList()
-            if err != nil {
-            log.Printf("error getting taco list: %v", err)
-            return
-        }
+	go func() {
+		_, updated, err := c.GetTacoList()
+		if err != nil {
+			log.Printf("error getting taco list: %v", err)
+			return
+		}
 
-        if updated{
-         ctx.EventEnv().Lock(); ctx.EventEnv().UnlockRender()
-        }
-    }()
+		if updated {
+			ctx.EventEnv().Lock()
+			ctx.EventEnv().UnlockRender()
+		}
+	}()
 }
 
-func (c *Index) AddCartItem (event vugu.DOMEvent, index int) {
+func (c *Index) AddCartItem(event vugu.DOMEvent, index int) {
 	ee := event.EventEnv()
 	go func() {
 		err := c.PostCartItem(c.TacoList[index])
@@ -56,9 +58,8 @@ func (c *Index) AddCartItem (event vugu.DOMEvent, index int) {
 			return
 		}
 		ee.Lock()
-        c.Cart = append(c.Cart,c.TacoList[index])
+		c.Cart = append(c.Cart, c.TacoList[index])
 		ee.UnlockRender()
 	}()
-
 }
 </script>
