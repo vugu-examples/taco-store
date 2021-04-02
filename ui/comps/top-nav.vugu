@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class='col-2'>
-                                <button class='btn' @click='c.DeleteCardItem(event,index)'>
+                                <button class='btn' @click='c.DeleteCart(event,index)'>
                                     <i class="fa fa-times "></i>
                                 </button>
                             </div>
@@ -101,7 +101,7 @@ func (c *TopNav) Init(ctx vugu.InitCtx) {
 	}()
 }
 
-func (c *TopNav) DeleteCardItem(event vugu.DOMEvent, i int) {
+func (c *TopNav) DeleteCart(event vugu.DOMEvent, i int) {
 	newList := append(c.Cart[:i], c.Cart[i+1:]...)
 	ee := event.EventEnv()
 	go func() {
