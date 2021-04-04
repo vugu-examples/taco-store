@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -31,7 +32,18 @@ func (h *FrontendHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("FrontendHandler starting with dist dir: %s", distDir)
 
 	buildFrontend := func() (ok bool) {
-		cmd := exec.Command("/bin/sh", "build.sh")
+		var cmd *exec.Cmd
+
+		// detect os
+		ops := runtime.GOOS
+		switch ops {
+		case "darwin", "linux":
+			cmd = exec.Command("sh", "build.sh")
+		case "windows":
+			cmd = exec.Command("sh", "build.bat")
+		default:
+			fmt.Fprintf(w, "build-frontend.go unknown os:%s", ops)
+		}
 
 		cmd.Env = append(os.Environ(), "GO111MODULE=auto")
 
