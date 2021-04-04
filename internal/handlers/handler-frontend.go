@@ -31,7 +31,7 @@ func (h *FrontendHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("FrontendHandler starting with dist dir: %s", distDir)
 
 	buildFrontend := func() (ok bool) {
-		cmd := exec.Command("go", "run", "build-frontend.go")
+		cmd := exec.Command("/bin/sh", "build.sh")
 
 		cmd.Env = append(os.Environ(), "GO111MODULE=auto")
 
