@@ -32,22 +32,16 @@ func (h *FrontendHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("FrontendHandler starting with dist dir: %s", distDir)
 
 	buildFrontend := func() (ok bool) {
-		var cmd *exec.Cmd
 
-		// detect os
-		ops := runtime.GOOS
-		switch ops {
-		case "darwin", "linux":
-			cmd = exec.Command("sh", "build.sh")
-		case "windows":
-			cmd = exec.Command("sh", "build.bat")
-		default:
-			fmt.Fprintf(w, "build-frontend.go unknown os:%s", ops)
+		cmd := exec.Command("sh", "build-wasm.sh")
+
+		if runtime.GOOS == "windows" {
+			cmd = exec.Command("sh", "build-wasm.bat")
 		}
 
 		cmd.Env = append(os.Environ(), "GO111MODULE=auto")
 
-		cmd.Dir = filepath.Join(h.BaseDir, "cmd", "taco-store")
+		cmd.Dir = h.BaseDir
 		b, err := cmd.CombinedOutput()
 		log.Printf("go run build-frontend.go - err: %v\n%s", err, b)
 		if err != nil {
@@ -129,7 +123,7 @@ if (wasmSupported) {
 			return await WebAssembly.instantiate(source, importObject);
 		};
 	}
-	var mainWasmReq = fetch("/main.wasm").then(function(res) {
+	var mainWasmReq = fetch("/index.wasm").then(function(res) {
 		if (res.ok) {
 			const go = new Go();
 			WebAssembly.instantiateStreaming(res, go.importObject).then((result) => {
