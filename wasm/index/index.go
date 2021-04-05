@@ -1,11 +1,11 @@
 // +build wasm
 
-package main
+package index
 
 import (
 	"flag"
 	"fmt"
-	"github.com/vugu-examples/taco-store/wasm/taco-store/setup"
+	"github.com/vugu-examples/taco-store/wasm/index/setup"
 	"github.com/vugu/vugu"
 	"github.com/vugu/vugu/domrender"
 )
