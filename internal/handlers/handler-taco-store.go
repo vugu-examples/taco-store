@@ -7,12 +7,14 @@ import (
 	"net/http"
 )
 
+// TacoStoreAPIHandler holds endpoints for taco list
 type TacoStoreAPIHandler struct {
-	Store *memstore.TacoStore
+	Store *memstore.MemStore
 	*httprouter.Router
 }
 
-func NewTacoStoreAPIHandler(mem *memstore.TacoStore) *TacoStoreAPIHandler {
+// NewTacoStoreAPIHandler returns a new instance of TacoStoreAPIHandler.
+func NewTacoStoreAPIHandler(mem *memstore.MemStore) *TacoStoreAPIHandler {
 	h := &TacoStoreAPIHandler{
 		Store:  mem,
 		Router: httprouter.New(),
@@ -24,6 +26,7 @@ func NewTacoStoreAPIHandler(mem *memstore.TacoStore) *TacoStoreAPIHandler {
 	return h
 }
 
+// GetTacoList gets taco list
 func (h *TacoStoreAPIHandler) GetTacoList(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	list := h.Store.SelectTacoList()
 	json.NewEncoder(w).Encode(list)

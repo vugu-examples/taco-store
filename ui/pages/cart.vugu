@@ -1,0 +1,96 @@
+<div class="row justify-content-center">
+    <div class="col-8 p-4 ">
+        <h3 class='my-3'>Cart (
+            <span vg-content='len(c.Cart)'></span>
+            ) items
+        </h3>
+        <div vg-for='index, item := range c.Cart' class='row border mt-2 mb-3 ml-0'>
+            <div class='col-3 p-4'>
+                <img :src="item.ImageUrl" class="img-fluid rounded">
+            </div>
+            <div class='col-9 d-flex justify-content-between align-items-center '>
+                <div class='col text-left  '>
+                    <h5 vg-content='item.Title'></h5>
+                </div>
+                <div class='col d-flex justify-content-between align-items-center'>
+                    <span vg-content='format.Currency(item.Price) '></span>
+                    <button class='btn' @click='c.DeleteCart(event,index)'>
+                        <i class="fa fa-times "></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class='col-4 mt-5'>
+        <div class="mt-3 ml-2">
+            <div class="pt-4">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                        Subtotal
+                        <span vg-content='c.GetCartTotal()'></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Shipping
+                        <span>Gratis</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                        <div>
+                            <strong>Total</strong>
+                        </div>
+                        <span><strong vg-content='c.GetCartTotal()'></strong></span>
+                    </li>
+                    <li class='list-group-item text-center'>
+                            <button class="btn btn-warning " @click='c.Navigate("/checkout", nil)'><strong>Proceed to
+                        checkout</strong></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/x-go">
+import (
+    "log"
+    "github.com/vugu-examples/taco-store/ui/state"
+    "github.com/vugu-examples/taco-store/ui/format"
+    "github.com/vugu/vgrouter"
+)
+type Cart struct {
+	vgrouter.NavigatorRef
+	state.CartAPIRef
+}
+
+func (c *Cart) Init(ctx vugu.InitCtx) {
+	go func() {
+		_, updated, err := c.GetCart()
+		if err != nil {
+			log.Printf("error getting Cart items: %v", err)
+			return
+		}
+
+		if updated {
+			ctx.EventEnv().Lock()
+			ctx.EventEnv().UnlockRender()
+		}
+	}()
+}
+
+func (c *Cart) DeleteCart(event vugu.DOMEvent, i int) {
+	newList := append(c.Cart[:i], c.Cart[i+1:]...)
+	ee := event.EventEnv()
+	go func() {
+		err := c.DeleteCartItem(newList)
+		if err != nil {
+			ee.Lock()
+			log.Printf("error deleting card item: %v", err)
+			ee.UnlockRender()
+			return
+		}
+		ee.Lock()
+		c.Cart = newList
+		ee.UnlockRender()
+	}()
+}
+</script>

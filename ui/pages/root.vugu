@@ -1,32 +1,14 @@
 <div>
-    <main role="main" class="container text-center">
+    <main role="main" class="container">
         <comps:TopNav></comps:TopNav>
         <vg-comp expr="c.Body"/>
     </main>
 </div>
 
 <script type="application/x-go">
-import "log"
-import "net/http"
 import "github.com/vugu-examples/taco-store/ui/comps"
 
 
 type Root struct {
     Body vugu.Builder
 }
-func (c *Root) Init(ctx vugu.InitCtx) {
-    go func() {
-    // :TODO move this call to state
-      resp, err := http.Get("/api/taco-list")
-      if err != nil {
-          log.Printf("Error fetching: %v", err)
-          return
-      }
-      log.Println(resp)
-      defer resp.Body.Close()
-      ctx.EventEnv().Lock()
-      ctx.EventEnv().UnlockRender()
-    }()
-}
-    
-</script>

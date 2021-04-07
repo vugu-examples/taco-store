@@ -14,12 +14,14 @@ func main() {
 	fullBaseDir, _ := filepath.Abs(*baseDir)
 
 	mux := http.NewServeMux()
-	hl := handlers.NewFrontendHandler(fullBaseDir)
-	mem := memstore.NewTacoStore()
+	frhl := handlers.NewFrontendHandler(fullBaseDir)
+	mem := memstore.NewMemStore()
 
-	hl2 := handlers.NewTacoStoreAPIHandler(mem)
-	mux.Handle("/", hl)
-	mux.Handle("/api/taco-list", hl2)
+	tchl := handlers.NewTacoStoreAPIHandler(mem)
+	cahl := handlers.NewCartAPIHandler(mem)
+	mux.Handle("/", frhl)
+	mux.Handle("/api/taco-list", tchl)
+	mux.Handle("/api/cart", cahl)
 
 	l := "127.0.0.1:8844"
 	log.Printf("Starting HTTP Server at %q", l)
